@@ -11,6 +11,7 @@ const ContextProvider = ({ children }) => {
   const [call, setCall] = useState({});
   const [name, setName] = useState("");
   const [callReceived, setCallReceived] = useState(false);
+  const [callDisconnected, setCallDisconnected] = useState();
 
   const video = useRef();
   const peerVideo = useRef();
@@ -65,5 +66,8 @@ const ContextProvider = ({ children }) => {
     connRef.current = peer;
   };
 
-  const disconnectCall = () => { };
+  const disconnectCall = () => {
+    setCallDisconnected(true);
+    connRef.current.destroy();
+  };
 };
