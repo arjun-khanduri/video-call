@@ -4,11 +4,17 @@ import Peer from "simple-peer";
 
 const SocketContext = createContext();
 const socket = io("http://localhost:8080");
+
 const ContextProvider = ({ children }) => {
   const [stream, setStream] = useState(null);
   const [me, setMe] = useState("");
   const [call, setCall] = useState({});
+  const [callReceived, setCallReceived] = useState(false);
+
   const video = useRef();
+  const peerVideo = useRef();
+  const connRef = useRef();
+
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
@@ -21,7 +27,24 @@ const ContextProvider = ({ children }) => {
       setCall({ isReceivedCall: true, from, name: callerName, signal });
     });
   }, []);
-  const receiveCall = () => {};
-  const initCall = () => {};
-  const disconnectCall = () => {};
+
+  const receiveCall = () => {
+    setCallReceived(true);
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      stream: stream,
+    });
+    peer.on('signal', (data) => {
+      socket.emit('callanswered', { signal: data, to: call.from });
+    });
+    peer.on('stream', (currentStream) =>
+      peerVideo.current.srcObject = currentStream
+    );
+    peer.signal(call.signal)
+    connRef.current = peer;
+  };
+
+  const initCall = () => { };
+  const disconnectCall = () => { };
 };
