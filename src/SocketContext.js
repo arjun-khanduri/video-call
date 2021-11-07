@@ -70,4 +70,26 @@ const ContextProvider = ({ children }) => {
     setCallDisconnected(true);
     connRef.current.destroy();
   };
+
+  return (
+    <SocketContext.Provider
+      value={{
+        me,
+        call,
+        callReceived,
+        callDisconnected,
+        name,
+        setName,
+        receiveCall,
+        initCall,
+        disconnectCall,
+        video,
+        peerVideo,
+        stream
+      }}>
+      {children}
+    </SocketContext.Provider>
+  )
 };
+
+export { ContextProvider, SocketContext }
