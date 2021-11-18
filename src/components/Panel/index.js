@@ -19,13 +19,13 @@ const Panel = ({ children }) => {
                 <input
                     type="text"
                     value={name}
-                    onchange={(e) => setName(e.target.value)} />
+                    onChange={(e) => setName(e.target.value)} />
                 <br />
                 <h4>Make a call</h4>
                 <input
                     type="text"
                     value={callerID}
-                    onchange={(e) => setCallerID(e.target.value)} />
+                    onChange={(e) => setCallerID(e.target.value)} />
                 {callReceived && !callDisconnected ? (
                     <button onClick={disconnectCall}>
                         Hang up
