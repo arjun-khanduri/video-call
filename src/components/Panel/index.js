@@ -26,7 +26,7 @@ const Panel = ({ children }) => {
                     type="text"
                     value={callerID}
                     onchange={(e) => setCallerID(e.target.value)} />
-                {callReceived ? (
+                {callReceived && !callDisconnected ? (
                     <button onClick={disconnectCall}>
                         Hang up
                     </button>
