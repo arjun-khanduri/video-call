@@ -1,7 +1,10 @@
 import React from "react";
+import VideoFeed from './components/VideoFeed';
 
 const App = () => {
-  return <div>Video Call App</div>;
+  return (
+    <VideoFeed />
+  )
 };
 
 export default App;
