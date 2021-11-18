@@ -16,6 +16,7 @@ const Panel = ({ children }) => {
         <div>
             <form>
                 <h4>Your name</h4>
+                <p>{me}</p>
                 <input
                     type="text"
                     value={name}
