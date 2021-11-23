@@ -4,17 +4,23 @@ import { SocketContext } from '../../SocketContext';
 
 const Alert = () => {
     const {
-        call,
-        callReceived,
         receiveCall,
+        call,
+        callReceived
     } = useContext(SocketContext);
+
+    console.log(call)
+
     return (
         <>
-            {call.isReceivedCall && !callReceived && (
+            {call.isReceivingCall && !callReceived && (
                 <div>
                     <h1>Calling '{call.name}'...</h1>
                     <button onClick={receiveCall}>
                         Receive Call
+                    </button>
+                    <button onClick={() => window.location.reload()}>
+                        Reject Call
                     </button>
                 </div>
             )}
