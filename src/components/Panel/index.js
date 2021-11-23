@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { SocketContext } from '../../SocketContext';
+import React, { useContext, useState } from "react";
+import { SocketContext } from "../../SocketContext";
 
 const Panel = ({ children }) => {
     const {
@@ -7,11 +7,11 @@ const Panel = ({ children }) => {
         callReceived,
         name,
         setName,
-        disconnectCall,
         callDisconnected,
+        disconnectCall,
         initCall
     } = useContext(SocketContext);
-    const [callerID, setCallerID] = useState('');
+    const [callerID, setCallerID] = useState("");
     return (
         <div>
             <form>
@@ -20,26 +20,24 @@ const Panel = ({ children }) => {
                 <input
                     type="text"
                     value={name}
-                    onChange={(e) => setName(e.target.value)} />
+                    onChange={(e) => setName(e.target.value)}
+                />
                 <br />
                 <h4>Make a call</h4>
                 <input
                     type="text"
                     value={callerID}
-                    onChange={(e) => setCallerID(e.target.value)} />
+                    onChange={(e) => setCallerID(e.target.value)}
+                />
                 {callReceived && !callDisconnected ? (
-                    <button onClick={disconnectCall}>
-                        Hang up
-                    </button>
+                    <button onClick={disconnectCall}>Hang up</button>
                 ) : (
-                    <button onClick={() => initCall(callerID)}>
-                        Call
-                    </button>
+                    <button onClick={(e) => { e.preventDefault(); initCall(callerID) }}>Call</button>
                 )}
                 {children}
             </form>
         </div>
-    )
-}
+    );
+};
 
-export default Panel
+export default Panel;
