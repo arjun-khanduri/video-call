@@ -25,12 +25,12 @@ server.listen(PORT, () => {
 io.on("connect", (socket) => {
     socket.emit("me", socket.id);
     socket.on("disconnect", () => {
-        socket.broadcast.emit("user disconnected");
+        socket.broadcast.emit("callDisconnected");
     });
-    socket.on("calluser", ({ userToCall, signalData, from, name }) => {
-        io.to(userToCall).emit("initcall", { signalData, from, name });
+    socket.on("initCall", ({ userToCall, signalData, from, name }) => {
+        io.to(userToCall).emit("initCall", { signal: signalData, from, name });
     });
-    socket.on("callanswered", ({ to, signal }) => {
-        io.to(to).emit("callreceived", signal);
+    socket.on("receiveCall", ({ to, signal }) => {
+        io.to(to).emit("callReceived", signal);
     });
 });

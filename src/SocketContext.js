@@ -6,12 +6,12 @@ const SocketContext = createContext();
 const socket = io("http://localhost:8080");
 
 const ContextProvider = ({ children }) => {
-  const [stream, setStream] = useState(null);
-  const [me, setMe] = useState("");
-  const [call, setCall] = useState({});
-  const [name, setName] = useState("");
   const [callReceived, setCallReceived] = useState(false);
-  const [callDisconnected, setCallDisconnected] = useState();
+  const [callDisconnected, setCallDisconnected] = useState(false);
+  const [stream, setStream] = useState();
+  const [name, setName] = useState('');
+  const [call, setCall] = useState({});
+  const [me, setMe] = useState('');
 
   const video = useRef();
   const peerVideo = useRef();
@@ -25,8 +25,8 @@ const ContextProvider = ({ children }) => {
         video.current.srcObject = stream;
       });
     socket.on("me", (id) => setMe(id));
-    socket.on("calluser", ({ from, name: callerName, signal }) => {
-      setCall({ isReceivedCall: true, from, name: callerName, signal });
+    socket.on("initCall", ({ from, name: callerName, signal }) => {
+      setCall({ isReceivingCall: true, from, name: callerName, signal });
     });
   }, []);
 
@@ -35,10 +35,10 @@ const ContextProvider = ({ children }) => {
     const peer = new Peer({
       initiator: false,
       trickle: false,
-      stream: stream,
+      stream
     });
     peer.on('signal', (data) => {
-      socket.emit('callanswered', { signal: data, to: call.from });
+      socket.emit('receiveCall', { signal: data, to: call.from });
     });
     peer.on('stream', (currentStream) =>
       peerVideo.current.srcObject = currentStream
@@ -54,12 +54,12 @@ const ContextProvider = ({ children }) => {
       stream: stream,
     });
     peer.on('signal', (data) => {
-      socket.emit('calluser', { userToCall: id, signalData: data, from: me });
+      socket.emit('initCall', { userToCall: id, signalData: data, from: me });
     });
     peer.on('stream', (currentStream) =>
       peerVideo.current.srcObject = currentStream
     );
-    socket.on('callanswered', (signalData) => {
+    socket.on('callReceived', (signalData) => {
       setCallReceived(true);
       peer.signal(signalData);
     });
@@ -74,18 +74,18 @@ const ContextProvider = ({ children }) => {
   return (
     <SocketContext.Provider
       value={{
-        me,
         call,
         callReceived,
-        callDisconnected,
-        name,
-        setName,
-        receiveCall,
-        initCall,
-        disconnectCall,
         video,
         peerVideo,
-        stream
+        stream,
+        name,
+        setName,
+        callDisconnected,
+        me,
+        initCall,
+        disconnectCall,
+        receiveCall,
       }}>
       {children}
     </SocketContext.Provider>
