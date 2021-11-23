@@ -7,9 +7,9 @@ const VideoFeed = () => {
     callReceived,
     video,
     peerVideo,
-    stream,
     callDisconnected,
-    call,
+    stream,
+    call
   } = useContext(SocketContext);
   return (
     <div>
@@ -33,7 +33,6 @@ const VideoFeed = () => {
               id="video"
               autoPlay
               playsInline
-              muted
               ref={peerVideo}
             />
           </div>
