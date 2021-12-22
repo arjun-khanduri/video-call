@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { SocketContext } from "../../SocketContext";
+import { Col, Row } from 'antd';
 
 const VideoFeed = () => {
   const {
@@ -11,34 +12,40 @@ const VideoFeed = () => {
     stream,
     call
   } = useContext(SocketContext);
+
   return (
-    <div>
-      {stream && (
-        <div>
-          <h4>{name || 'Name'}</h4>
-          <video
-            id="video"
-            autoPlay
-            playsInline
-            muted
-            ref={video}
-          />
-        </div>
-      )}
-      {
-        callReceived && !callDisconnected && (
-          <div>
-            <h4>{call.name || 'Peer Name'}</h4>
+    <>
+      <Row>
+        {stream && (
+          <Col span={8}>
+            <h4>{name || 'Name'}</h4>
             <video
               id="video"
+              width="100%"
               autoPlay
               playsInline
-              ref={peerVideo}
+              muted
+              ref={video}
             />
-          </div>
-        )
-      }
-    </div>
+          </Col>
+        )}
+        <Col span={8}></Col>
+        {
+          callReceived && !callDisconnected && (
+            <Col span={8}>
+              <h4>{call.name || 'Peer Name'}</h4>
+              <video
+                id="peerVideo"
+                width="100%"
+                autoPlay
+                playsInline
+                ref={peerVideo}
+              />
+            </Col>
+          )
+        }
+      </Row>
+    </>
   );
 };
 
