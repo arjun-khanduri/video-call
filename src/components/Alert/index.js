@@ -1,8 +1,9 @@
-import React, { useContext } from 'react'
-
+import React, { useContext } from 'react';
 import { SocketContext } from '../../SocketContext';
-import { Card, Button, Row, Col } from 'antd';
-// import './index.css';
+import { Modal, Button, Space, Typography, Avatar } from 'antd';
+import { PhoneOutlined, UserOutlined, CloseCircleOutlined } from '@ant-design/icons';
+
+const { Title, Text } = Typography;
 
 const Alert = () => {
     const {
@@ -11,29 +12,62 @@ const Alert = () => {
         callReceived
     } = useContext(SocketContext);
 
-    console.log(call)
-
     return (
         <>
-            <Row>
-                <Col span={10}></Col>
-                {call.isReceivingCall && !callReceived && (
-                    <Col span={12}>
-                        <Card class="alert" style={{ width: '50%', textAlign: 'center' }}>
-                            <h1>Calling '{call.name}'...</h1>
-                            <Button type="primary" onClick={receiveCall}>
-                                Receive Call
-                            </Button>
-                            <Button type="danger" onClick={() => window.location.reload()}>
-                                Reject Call
-                            </Button>
-                        </Card>
-                    </Col>
-                )}
+            <Modal
+                open={call.isReceivingCall && !callReceived}
+                footer={null}
+                closable={false}
+                centered
+                width={360}
+            >
+                <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                    <Space direction="vertical" size="large" style={{ width: '100%' }}>
+                        <Avatar
+                            size={80}
+                            icon={<UserOutlined />}
+                            style={{ 
+                                backgroundColor: '#1890ff',
+                                animation: 'pulse 1.5s infinite'
+                            }}
+                        />
+                        
+                        <div>
+                            <Title level={4} style={{ margin: 0 }}>
+                                Incoming Call
+                            </Title>
+                            <Text type="secondary">
+                                from {call.name || 'Unknown'}
+                            </Text>
+                        </div>
 
-            </Row>
+                        <Space size="middle">
+                            <Button
+                                type="primary"
+                                icon={<PhoneOutlined />}
+                                size="large"
+                                onClick={receiveCall}
+                                style={{ 
+                                    backgroundColor: '#52c41a',
+                                    borderColor: '#52c41a'
+                                }}
+                            >
+                                Accept
+                            </Button>
+                            <Button
+                                danger
+                                icon={<CloseCircleOutlined />}
+                                size="large"
+                                onClick={() => window.location.reload()}
+                            >
+                                Decline
+                            </Button>
+                        </Space>
+                    </Space>
+                </div>
+            </Modal>
         </>
-    )
-}
+    );
+};
 
-export default Alert
+export default Alert;
